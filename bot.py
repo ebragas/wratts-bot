@@ -1,6 +1,6 @@
 # !/bin/python
-import os
 import logging
+import os
 
 import discord
 from dotenv import load_dotenv
