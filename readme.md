@@ -1,6 +1,9 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/ebragas/wratts-bot/badge)](https://www.codefactor.io/repository/github/ebragas/wratts-bot)
 [![codecov](https://codecov.io/gh/ebragas/wratts-bot/branch/master/graph/badge.svg?token=K3022QBYDA)](undefined)
 
+# About
+Wratts is the name of a quirky and lovable goblin character from one of our more interesting Pathfinder 2e campaigns. Because she's a party NPC and in many ways a mascot, we decided to name the bot after her.
+
 ## Usage
 ### Discord Auth
 1. Login to Discord developer portal

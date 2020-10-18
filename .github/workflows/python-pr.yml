@@ -1,9 +1,9 @@
 name: Python Pull Request Workflow
 on: [pull_request]
 jobs:
-  qa:
+  test:
     name: Quality Check
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup Python
@@ -21,3 +21,10 @@ jobs:
           reporter: 'github-pr-review'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    steps:
+      - users: actions/checkout@v2
+      - name: Build Image
+        run: docker build -t wratt-bot .
