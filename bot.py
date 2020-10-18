@@ -1,12 +1,13 @@
 # !/bin/python
+import logging
 import os
 
 import discord
 from dotenv import load_dotenv
 
 
-
 class WrattBot(discord.Client):
+
     async def on_ready(self):
         guild = discord.utils.get(client.guilds, name=GUILD)
         print(
@@ -35,9 +36,11 @@ class WrattBot(discord.Client):
 
 if __name__ == '__main__':
 
+    logging.basicConfig(level=logging.INFO)
     load_dotenv()
     TOKEN = os.getenv('DISCORD_TOKEN')
     GUILD = os.getenv('DISCORD_GUILD')
 
+    logging.info('Starting bot...')
     client = WrattBot()
     client.run(TOKEN)
