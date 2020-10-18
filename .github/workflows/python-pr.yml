@@ -25,6 +25,6 @@ jobs:
     name: Docker Build
     runs-on: ubuntu-latest
     steps:
-      - users: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Build Image
         run: docker build -t wratt-bot .
