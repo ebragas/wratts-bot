@@ -20,15 +20,10 @@ class WrattBot(discord.Client):
 
     async def on_member_join(self, member):
         logging.info('on_member_join')
-        channel = client.get_channel(ID)
-        await channel.edit(name = 'Member count: {}'.format(channel.guild.member_count))
-
-    # async def on_member_join(self, member):
-    #     logging.info('on_member_join')
-    #     await member.create_dm()
-    #     await member.dm_channel.send(
-    #         f'Hi {member.name}, welcome to my Discord server!'
-    #     )
+        await member.create_dm()
+        await member.dm_channel.send(
+            f'Hi {member.name}, welcome to my Discord server!'
+        )
 
     async def on_message(self, message):
         print(f'Message from {message.author}: {message.content}')
