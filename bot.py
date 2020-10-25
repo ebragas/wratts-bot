@@ -11,7 +11,6 @@ import discord
 
 bot = commands.Bot(command_prefix='!')
 
-
 @bot.event
 async def on_ready():
     """Logs bot ready state"""
@@ -44,13 +43,56 @@ async def roll_dice(ctx, times: int, sides: int):
     await ctx.send(rolls)
 
 
+class Greetings(commands.Cog):
+    
+    GREETINGS = ['oh hai', 'Hey', 'Hey hey', ':wave:']
+    
+    def __init__(self, bot):
+        self.bot = bot
+        self._last_member = None
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        channel = member.guild.system_channel
+        if channel is not None:
+            await channel.send(f'Welcome {member.mention}!')
+
+    @commands.command()
+    async def hello(self, ctx, *, member: discord.Member=None):
+        """Says hello"""
+        member = member or ctx.author
+        greeting = random.choice(self.GREETINGS)
+        if self._last_member is None or self._last_member.id != member.id:
+            await ctx.send(f'{greeting} {member.mention}!')
+        else:
+            await ctx.send(
+                f'{greeting} {member.mention}...'
+                + ' This feels familiar :face_with_monocle:'
+                )
+        self._last_member = member
+
+
+bot.add_cog(Greetings(bot))
+
+# @bot.command(name='roll_call', help='Let the festivities begin!')
+# async def start_roll():
+#     raise NotImplementedError
+#     # send a message
+#     # save message
+
+# @bot.command(name='close_roll', help='Close roll call and assign ingredients')
+# async def close_roll():
+#     raise NotImplementedError
+#     # retrieve list of positive emojis off of previous msg
+#     # assign ingredients        
+
 if __name__ == '__main__':
 
     logging.basicConfig(level=logging.INFO)
 
     load_dotenv()
     TOKEN = os.getenv('DISCORD_TOKEN')
-    GUILD = os.getenv('DISCORD_GUILD')
+    # GUILD = os.getenv('DISCORD_GUILD')
 
     logging.info('Starting bot...')
 
