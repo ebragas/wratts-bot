@@ -74,17 +74,6 @@ class Greetings(commands.Cog):
 
 bot.add_cog(Greetings(bot))
 
-# @bot.command(name='roll_call', help='Let the festivities begin!')
-# async def start_roll():
-#     raise NotImplementedError
-#     # send a message
-#     # save message
-
-# @bot.command(name='close_roll', help='Close roll call and assign ingredients')
-# async def close_roll():
-#     raise NotImplementedError
-#     # retrieve list of positive emojis off of previous msg
-#     # assign ingredients        
 
 if __name__ == '__main__':
 
