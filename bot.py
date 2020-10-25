@@ -1,4 +1,4 @@
-"""A bot for fun and profit!"""
+"""A bot for fun and profit."""
 
 import logging
 import os
@@ -11,9 +11,11 @@ from dotenv import load_dotenv # NOTE: not sure I want to keep this
 
 bot = commands.Bot(command_prefix='!')
 
+
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
+
 
 @bot.command(name='99', help='Responds with a random Brooklyn Nine Nine quote')
 async def nine_nine(ctx):
@@ -28,6 +30,7 @@ async def nine_nine(ctx):
 
     response = random.choice(b99_quotes)
     await ctx.send(response)
+
 
 @bot.command(name='roll', help='Rolls a die a few times and returns the results')
 async def roll_dice(ctx, times: int, sides: int):
@@ -47,7 +50,5 @@ if __name__ == '__main__':
     GUILD = os.getenv('DISCORD_GUILD')
 
     logging.info('Starting bot...')
-    # client = WrattBot()
-    # client.run(TOKEN)
 
     bot.run(TOKEN)
