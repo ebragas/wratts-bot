@@ -14,3 +14,9 @@ Wratts is the name of a quirky and lovable goblin character from one of our more
 2. Build Docker image with `docker build -t wratt-bot .`
 3. Create `.env` file with your Discord token and channel_id TODO: change to args?
 4. Run image (with stdout) `docker run --rm -it wratt-bot`
+
+### Sample .env file
+```
+DISCORD_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+DISCORD_GUILD=your guild name!
+```
