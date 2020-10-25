@@ -80,6 +80,15 @@ async def nine_nine(ctx):
     response = random.choice(b99_quotes)
     await ctx.send(response)
 
+@bot.command(name='roll', help='Rolls a die a few times and returns the results')
+async def roll_dice(ctx, times: int, sides: int): 
+    # TODO: makes sides a dice object initializer e.g. Die(d4)
+    rolls = [
+        str(random.choice(range(1, sides + 1)))
+        for _ in range(times)
+    ]
+    await ctx.send(rolls)
+
 
 if __name__ == '__main__':
 
