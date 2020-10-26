@@ -18,7 +18,6 @@ bot = commands.Bot(command_prefix='!')
 async def on_ready():
     """Logs bot ready state"""
     logging.info(f'{bot.user.name} has connected to Discord!')
-    # TODO: unpin any pinned messages
 
 
 @bot.command(name='99', help='Responds with a random Brooklyn Nine Nine quote')
