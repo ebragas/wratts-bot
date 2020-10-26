@@ -78,10 +78,14 @@ class Greetings(commands.Cog):
 class RollCall(commands.Cog):
 
     INGREDIENTS = [
-        'lettuce, tomato & cilantro',
-        'cheese & sour cream',
-        'chips & salsa',
-        'seasoning & beans',
+        'lettuce',
+        'tomato',
+        'cilantro',
+        'cheese', 
+        'sour cream',
+        'chips', 'salsa',
+        'seasoning', 
+        'beans',
         'avocados'
     ]
 
@@ -101,35 +105,43 @@ class RollCall(commands.Cog):
     @commands.command(name='closeroll')
     async def close_roll(self, ctx):
 
-        if not self._roll_call_msg:
-            await ctx.send("Roll hasn't been called yet. Start with `!rollcall`")
-            return
+        try:
+            if not self._roll_call_msg:
+                await ctx.send("Roll hasn't been called yet. Start with `!rollcall`")
+                return
 
-        self._roll_call_msg = await ctx.channel.fetch_message(self._roll_call_msg.id)
+            self._roll_call_msg = await ctx.channel.fetch_message(self._roll_call_msg.id)
 
-        # get affirmative responders
-        reactions = self._roll_call_msg.reactions
-        logging.info(reactions)
+            # get affirmative responders
+            reactions = self._roll_call_msg.reactions
+            logging.info(reactions)
 
-        attendees = []
-        async for user in reactions[0].users():
-            attendees.append(user)
- 
-        # assign ingredients
-        # TODO: pull this out
-        random.shuffle(attendees)
-        ingredients = self.INGREDIENTS.copy()
-        random.shuffle(ingredients)
+            attendees = []
+            async for user in reactions[0].users():
+                if user.name != bot.user.name:
+                    attendees.append(user)
 
-        assignments = defaultdict(list)
-        for assignee, ingredient in zip(cycle(attendees), ingredients):
-            assignments[assignee].append(ingredient)
+            if not attendees:
+                await ctx.send('No on likes my cooking? :cry:')
 
-        for member, items in assignments.items():
-            assignment = f'{member.mention}: {", ".join(items)}'
-            await ctx.send(assignment)
+            # assign ingredients
+            # TODO: pull this out
+            random.shuffle(attendees)
+            ingredients = self.INGREDIENTS.copy()
+            random.shuffle(ingredients)
 
-        # cleanup
+            assignments = defaultdict(list)
+            for assignee, ingredient in zip(cycle(attendees), ingredients):
+                assignments[assignee].append(ingredient)
+
+            for member, items in assignments.items():
+                assignment = f'{member.mention}: {", ".join(items)}'
+                await ctx.send(assignment)
+
+        finally:
+            # cleanup
+            await self._roll_call_msg.unpin()
+            self._roll_call_msg = None
 
 
 
