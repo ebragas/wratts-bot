@@ -96,19 +96,19 @@ class RollCall(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self._roll_call_msg = None
+        self._poll_msg = None
 
     @commands.command(name='rollcall')
     async def start_roll(self, ctx):
         """Starts a reaction poll"""
-        self._roll_call_msg = await ctx.send(
+        self._poll_msg = await ctx.send(
             'Game night has begun! You coming?'
         )
 
         for emoji in ('👍', '👎'):
-            await self._roll_call_msg.add_reaction(emoji)
+            await self._poll_msg.add_reaction(emoji)
 
-        await self._roll_call_msg.pin()
+        await self._poll_msg.pin()
 
     @commands.command(name='closeroll')
     async def close_roll(self, ctx):
@@ -116,20 +116,19 @@ class RollCall(commands.Cog):
         responded affirmative
         """
         try:
-            if not self._roll_call_msg:
+            if not self._poll_msg:
                 await ctx.send("Roll hasn't been called yet. Start with `!rollcall`")
                 return
 
-            self._roll_call_msg = await ctx.channel.fetch_message(
-                self._roll_call_msg.id
+            self._poll_msg = await ctx.channel.fetch_message(
+                self._poll_msg.id
             )
 
             # get affirmative responders
-            reactions = self._roll_call_msg.reactions
-            logging.info(reactions)
+            logging.info(self._poll_msg.reactions)
 
             attendees = []
-            async for user in reactions[0].users():
+            async for user in self._poll_msg.reactions[0].users():
                 if user.name != bot.user.name:
                     attendees.append(user)
 
@@ -137,13 +136,7 @@ class RollCall(commands.Cog):
                 await ctx.send('No on likes my cooking? :cry:')
 
             # assign ingredients
-            random.shuffle(attendees)
-            ingredients = self.INGREDIENTS.copy()
-            random.shuffle(ingredients)
-
-            assignments = defaultdict(list)
-            for assignee, ingredient in zip(cycle(attendees), ingredients):
-                assignments[assignee].append(ingredient)
+            assignments = self._random_assignment(attendees)
 
             for member, items in assignments.items():
                 assignment = f'{member.mention}: {", ".join(items)}'
@@ -151,12 +144,20 @@ class RollCall(commands.Cog):
 
         finally:
             # cleanup
-            await self._roll_call_msg.unpin()
-            self._roll_call_msg = None
+            await self._poll_msg.unpin()
+            self._poll_msg = None
 
-    def _random_assignment(self, users):
+    def _random_assignment(self, members):
         """Randomly assign users a set of ingredients"""
-        raise NotImplementedError
+        random.shuffle(members)
+        ingredients = self.ingredients.copy()
+        random.shuffle(ingredients)
+
+        assignments = defaultdict(list)
+        for member, ingredient in zip(cycle(members), ingredients):
+            assignments[member].append(ingredient)
+
+        return assignments
 
 
 bot.add_cog(Greetings(bot))
