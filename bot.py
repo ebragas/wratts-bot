@@ -3,6 +3,8 @@
 import logging
 import os
 import random
+from collections import defaultdict
+from itertools import cycle
 
 from discord.ext import commands
 from dotenv import load_dotenv # NOTE: not sure I want to keep this
@@ -15,6 +17,7 @@ bot = commands.Bot(command_prefix='!')
 async def on_ready():
     """Logs bot ready state"""
     logging.info(f'{bot.user.name} has connected to Discord!')
+    # TODO: unpin any pinned messages
 
 
 @bot.command(name='99', help='Responds with a random Brooklyn Nine Nine quote')
@@ -72,7 +75,66 @@ class Greetings(commands.Cog):
         self._last_member = member
 
 
+class RollCall(commands.Cog):
+
+    INGREDIENTS = [
+        'lettuce, tomato & cilantro',
+        'cheese & sour cream',
+        'chips & salsa',
+        'seasoning & beans',
+        'avocados'
+    ]
+
+    def __init__(self, bot):
+        self.bot = bot
+        self._roll_call_msg = None
+
+    @commands.command(name='rollcall')
+    async def start_roll(self, ctx):
+        self._roll_call_msg = await ctx.send('Game night has begun! You coming?')
+        
+        for emoji in ('👍', '👎'):
+            await self._roll_call_msg.add_reaction(emoji)
+
+        await self._roll_call_msg.pin()
+
+    @commands.command(name='closeroll')
+    async def close_roll(self, ctx):
+
+        if not self._roll_call_msg:
+            await ctx.send("Roll hasn't been called yet. Start with `!rollcall`")
+            return
+
+        self._roll_call_msg = await ctx.channel.fetch_message(self._roll_call_msg.id)
+
+        # get affirmative responders
+        reactions = self._roll_call_msg.reactions
+        logging.info(reactions)
+
+        attendees = []
+        async for user in reactions[0].users():
+            attendees.append(user)
+ 
+        # assign ingredients
+        # TODO: pull this out
+        random.shuffle(attendees)
+        ingredients = self.INGREDIENTS.copy()
+        random.shuffle(ingredients)
+
+        assignments = defaultdict(list)
+        for assignee, ingredient in zip(cycle(attendees), ingredients):
+            assignments[assignee].append(ingredient)
+
+        for member, items in assignments.items():
+            assignment = f'{member.mention}: {", ".join(items)}'
+            await ctx.send(assignment)
+
+        # cleanup
+
+
+
 bot.add_cog(Greetings(bot))
+bot.add_cog(RollCall(bot))
 
 
 if __name__ == '__main__':
