@@ -37,7 +37,8 @@ async def nine_nine(ctx):
 
 
 @bot.command(
-    name='roll', help='Rolls a die a few times and returns the results')
+    name='roll', help='Rolls a die a few times and returns the results'
+)
 async def roll_dice(ctx, times: int, sides: int):
     """Rolls virtual dice"""
     rolls = [
@@ -48,7 +49,7 @@ async def roll_dice(ctx, times: int, sides: int):
 
 
 class Greetings(commands.Cog):
-    """Basic greetings cog"""
+    """Basic greetings cog."""
 
     ingredients = ['oh hai', 'Hey', 'Hey hey', ':wave:']
 
@@ -58,14 +59,14 @@ class Greetings(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        """Greet new members"""
+        """Greet new members."""
         channel = member.guild.system_channel
         if channel is not None:
             await channel.send(f'Welcome {member.mention}!')
 
     @commands.command()
     async def hello(self, ctx, *, member: discord.Member = None):
-        """Says hello"""
+        """Says hello."""
         member = member or ctx.author
         greeting = random.choice(self.GREETINGS)
         if self._last_member is None or self._last_member.id != member.id:
@@ -79,7 +80,7 @@ class Greetings(commands.Cog):
 
 
 class RollCall(commands.Cog):
-    """Roll call manager for taco salad ingredient assignment"""
+    """Roll call manager for taco salad ingredient assignment."""
 
     ingredients = [
         'lettuce',
@@ -99,7 +100,7 @@ class RollCall(commands.Cog):
 
     @commands.command(name='rollcall')
     async def start_roll(self, ctx):
-        """Starts a reaction poll"""
+        """Starts a reaction poll."""
         self._poll_msg = await ctx.send(
             'Game night has begun! You coming?'
         )
@@ -112,7 +113,7 @@ class RollCall(commands.Cog):
     @commands.command(name='closeroll')
     async def close_roll(self, ctx):
         """Closes the roll and randomly assigns ingredients to users who
-        responded affirmative
+        responded affirmative.
         """
         try:
             if not self._poll_msg:
@@ -147,7 +148,7 @@ class RollCall(commands.Cog):
             self._poll_msg = None
 
     def _random_assignment(self, members):
-        """Randomly assign users a set of ingredients"""
+        """Randomly assign users a set of ingredients."""
         random.shuffle(members)
         ingredients = self.ingredients.copy()
         random.shuffle(ingredients)
@@ -169,7 +170,6 @@ if __name__ == '__main__':
 
     load_dotenv()
     TOKEN = os.getenv('DISCORD_TOKEN')
-    # GUILD = os.getenv('DISCORD_GUILD')
 
     logging.info('Starting bot...')
 

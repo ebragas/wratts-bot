@@ -18,5 +18,7 @@ Wratts is the name of a quirky and lovable goblin character from one of our more
 ### Sample .env file
 ```
 DISCORD_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-DISCORD_GUILD=your guild name!
 ```
+
+## References
+[discord.py documentation](https://discordpy.readthedocs.io/en/latest)
