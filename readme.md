@@ -24,6 +24,6 @@ DISCORD_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 [discord.py documentation](https://discordpy.readthedocs.io/en/latest)
 
 
-
+ 
 
 
